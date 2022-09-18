@@ -8,34 +8,62 @@ class HealthIcon extends FlxSprite
 	 * Used for FreeplayState! If you use it elsewhere, prob gonna annoying
 	 */
 	public var sprTracker:FlxSprite;
+	public var isPlayer:Bool = false;
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
-		loadGraphic(Paths.image('iconGrid'), true, 150, 150);
+		scrollFactor.set();
+
+		this.isPlayer = isPlayer;
+		swapCharacter(char);
+	}
+	private var iconOffsets:Array<Float> = [0, 0];
+	public function swapCharacter(char:String)
+	{
+		switch(char)
+		{
+			case 'bf' | 'bf-car' | 'bf-christmas':
+				loadGraphic(Paths.image('icons/icon-bf'), true, 150, 150);
+			case 'gf' | 'gf-car' | 'gf-christmas' | 'gf-pixel':
+				loadGraphic(Paths.image('icons/icon-gf'), true, 150, 150);
+			case 'dad': 
+				loadGraphic(Paths.image('icons/icon-dad'), true, 150, 150);
+			case 'spooky':
+				loadGraphic(Paths.image('icons/icon-spooky'), true, 150, 150);
+			case 'pico' | 'pico-player':
+				loadGraphic(Paths.image('icons/icon-pico'), true, 150, 150);
+			case 'mom' | 'mom-car':
+				loadGraphic(Paths.image('icons/icon-mom'), true, 150, 150);
+			case 'parents-christmas':
+				loadGraphic(Paths.image('icons/icon-parents'), true, 150, 150);
+			case 'monster' | 'monster-christmas':
+				loadGraphic(Paths.image('icons/icon-monster'), true, 150, 150);
+			case 'bf-pixel':
+				loadGraphic(Paths.image('icons/icon-bf-pixel'), true, 150, 150);
+			case 'senpai':
+				loadGraphic(Paths.image('icons/icon-senpai'), true, 150, 150);
+			case 'senpai-angry':
+				loadGraphic(Paths.image('icons/icon-senpai-angry'), true, 150, 150);
+			case 'spirit':
+				loadGraphic(Paths.image('icons/icon-spirit'), true, 150, 150);
+			default: 
+				loadGraphic(Paths.image('icons/icon-${char}'), true, 150, 150); // I'm pretty sure if it can't find that icon it would just appear as a haxe logo right?
+		}
 
 		antialiasing = true;
-		animation.add('bf', [0, 1], 0, false, isPlayer);
-		animation.add('bf-car', [0, 1], 0, false, isPlayer);
-		animation.add('bf-christmas', [0, 1], 0, false, isPlayer);
-		animation.add('bf-pixel', [21, 21], 0, false, isPlayer);
-		animation.add('spooky', [2, 3], 0, false, isPlayer);
-		animation.add('pico', [4, 5], 0, false, isPlayer);
-		animation.add('mom', [6, 7], 0, false, isPlayer);
-		animation.add('mom-car', [6, 7], 0, false, isPlayer);
-		animation.add('tankman', [8, 9], 0, false, isPlayer);
-		animation.add('face', [10, 11], 0, false, isPlayer);
-		animation.add('dad', [12, 13], 0, false, isPlayer);
-		animation.add('senpai', [22, 22], 0, false, isPlayer);
-		animation.add('senpai-angry', [22, 22], 0, false, isPlayer);
-		animation.add('spirit', [23, 23], 0, false, isPlayer);
-		animation.add('bf-old', [14, 15], 0, false, isPlayer);
-		animation.add('gf', [16], 0, false, isPlayer);
-		animation.add('parents-christmas', [17], 0, false, isPlayer);
-		animation.add('monster', [19, 20], 0, false, isPlayer);
-		animation.add('monster-christmas', [19, 20], 0, false, isPlayer);
-		animation.play(char);
-		scrollFactor.set();
+		animation.add('idle', [0], 0, false, isPlayer);
+		animation.add('losing', [1], 0, false, isPlayer);
+		animation.add('winning', [2], 0, false, isPlayer);
+			
+		animation.play('idle');
+
+		switch(char)
+		{
+			case 'bf-pixel' | 'senpai' | 'senpai-angry' | 'spirit' | 'gf-pixel':
+				antialiasing = false;
+		}
+		
 	}
 
 	override function update(elapsed:Float)

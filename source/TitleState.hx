@@ -42,9 +42,6 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		#if polymod
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
-		#end
 		
 		#if sys
 		if (!sys.FileSystem.exists(Sys.getCwd() + "\\assets\\replays"))
@@ -77,6 +74,15 @@ class TitleState extends MusicBeatState
 		
 		if (FlxG.save.data.accuracyDisplay == null)
 			FlxG.save.data.accuracyDisplay = true;
+
+		if (FlxG.save.data.hitsounds == null)
+			FlxG.save.data.hitsounds = false;
+
+		if (FlxG.save.data.flashing == null)
+			FlxG.save.data.flashing = true;
+
+		if (FlxG.save.data.noteSplash == null)
+			FlxG.save.data.noteSplash = true;
 			
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
@@ -300,16 +306,16 @@ class TitleState extends MusicBeatState
 
 				http.onData = function (data:String) {
 				  
-				  	if (!MainMenuState.kadeEngineVer.contains(data.trim()) && !OutdatedSubState.leftState)
+				 /* 	if (!MainMenuState.kadeEngineVer.contains(data.trim()) && !OutdatedSubState.leftState)
 					{
 						trace('outdated lmao! ' + data.trim() + ' != ' + MainMenuState.kadeEngineVer);
 						OutdatedSubState.needVer = data;
 						FlxG.switchState(new OutdatedSubState());
 					}
 					else
-					{
+					{*/
 						FlxG.switchState(new MainMenuState());
-					}
+				//	}
 				}
 				
 				http.onError = function (error) {
@@ -378,10 +384,10 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
+				createCoolText(['Spirit Engine by']);
 			// credTextShit.visible = true;
 			case 3:
-				addMoreText('present');
+				addMoreText('Classic1926');
 			// credTextShit.text += '\npresent...';
 			// credTextShit.addText();
 			case 4:
