@@ -1,7 +1,7 @@
-#Spirit Engine
+# FNF Spirit Engine
 Engine that is based off of Kade Engine 1.2 with improvements from other engines, such as the note splash from Mic'd Up, Winning icons from FPS Plus, Week 7 from Psych Engine, etc.
 
-#Kade Engine
+# Kade Engine
 ![KadeEngineLogo](https://user-images.githubusercontent.com/26305836/110529589-4b4eb600-80ce-11eb-9c44-e899118b0bf0.png)
 
 **Download the latest release [here](https://github.com/KadeDev/Kade-Engine/releases/latest)**
