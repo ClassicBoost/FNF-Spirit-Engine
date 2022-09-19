@@ -91,7 +91,7 @@ class OptionsMenu extends MusicBeatState
 			if (curSelected == 5)
 				versionShit.text = 'With this on note splashes will appear if you hit a sick.';
 			if (curSelected == 6)
-				versionShit.text = 'With this on everytime you hit a note a\n\"Tick\n" sound will play.';
+				versionShit.text = 'With this on everytime you hit a note a\"Tick\" sound will play.';
 			if (curSelected == 7)
 				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
 			if (curSelected == 8)
