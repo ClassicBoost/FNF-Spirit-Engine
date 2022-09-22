@@ -25,7 +25,7 @@ class OptionsMenu extends MusicBeatState
 	override function create()
 	{
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolStringFile("Offset" + "\n" + (FlxG.save.data.dfjk ? 'DFJK' : 'WASD') + "\n" + (FlxG.save.data.newInput ? "Kade input" : "Vanilla Input") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off") + "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off") + "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off") + "\nLoad replays");
+		controlsStrings = CoolUtil.coolStringFile("Offset" + "\n" + (FlxG.save.data.dfjk ? 'DFJK' : 'WASD') + "\n" + (FlxG.save.data.newInput ? "Kade input" : "Vanilla Input") + "\n" + (FlxG.save.data.ghostTapping ? "Ghost Tapping" : "No Ghost Tapping") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off") + "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off") + "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off") + "\nLoad replays");
 		
 		trace(controlsStrings);
 
@@ -64,10 +64,16 @@ class OptionsMenu extends MusicBeatState
 
 			if (controls.BACK)
 				FlxG.switchState(new MainMenuState());
-			if (controls.UP_P)
+			if (controls.UP_P) {
+				if (!FlxG.save.data.newInput && curSelected == 4)
 				changeSelection(-1);
-			if (controls.DOWN_P)
+				changeSelection(-1);
+			}
+			if (controls.DOWN_P) {
+				if (!FlxG.save.data.newInput && curSelected == 2)
 				changeSelection(1);
+				changeSelection(1);
+			}
 			
 			if (curSelected == 0) {
 				versionShit.text = "Change your offsets\n" + FlxG.save.data.offset;
@@ -82,25 +88,35 @@ class OptionsMenu extends MusicBeatState
 			}
 			if (curSelected == 1)
 				versionShit.text = 'Change your controls. (WIP)';
-			if (curSelected == 2)
-				versionShit.text = 'Change the input system to your likings. (Vanilla or Kade)';
-			if (curSelected == 3)
-				versionShit.text = 'Choose where you want the notes to come from.';
+			if (curSelected == 2) {
+				if (FlxG.save.data.newInput)
+				versionShit.text = 'Kade Engine input fixes the broken input system.'
+				else
+				versionShit.text = 'Vanilla input is the og broken input, however it forces ghost tapping off.';
+			}
+			if (curSelected == 3) {
+				if (FlxG.save.data.ghostTapping)
+				versionShit.text = 'You will only miss if you don\'t hit the note.\nThis can remove a lot of the challenge since you can mash';
+				else
+				versionShit.text = 'After your turn starts; Ghost tapping will disable itself\nYou will miss if you press a invaild note.';
+			}
 			if (curSelected == 4)
-				versionShit.text = 'Turn this on to display your accuracy and misses.';
+				versionShit.text = 'Choose where you want the notes to come from.';
 			if (curSelected == 5)
-				versionShit.text = 'With this on note splashes will appear if you hit a sick.';
+				versionShit.text = 'With this on to display your accuracy and misses.';
 			if (curSelected == 6)
-				versionShit.text = 'With this on everytime you hit a note a\"Tick\" sound will play.';
+				versionShit.text = 'With this on note splashes will appear if you hit a sick.';
 			if (curSelected == 7)
-				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
+				versionShit.text = 'With this on everytime you hit a note a \"Tick\" sound will play.';
 			if (curSelected == 8)
+				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
+			if (curSelected == 9)
 				versionShit.text = 'Replay through the songs you\'ve played.';
 	
 
 			if (controls.ACCEPT)
 			{
-				if (curSelected != 7)
+				if (curSelected != 9)
 					grpControls.remove(grpControls.members[curSelected]);
 				switch(curSelected)
 				{
@@ -126,37 +142,50 @@ class OptionsMenu extends MusicBeatState
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 1;
 						grpControls.add(ctrl);
+						changeSelection();
 					case 3:
+						FlxG.save.data.ghostTapping = !FlxG.save.data.ghostTapping;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.ghostTapping ? "Ghost Tapping" : "No Ghost Tapping"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 1;
+						grpControls.add(ctrl);
+						changeSelection();
+					case 4:
 						FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll'), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 2;
 						grpControls.add(ctrl);
-					case 4:
+						changeSelection();
+					case 5:
 						FlxG.save.data.accuracyDisplay = !FlxG.save.data.accuracyDisplay;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Accuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
-					case 5:
+						changeSelection();
+					case 6:
 						FlxG.save.data.noteSplash = !FlxG.save.data.noteSplash;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Notesplashes " + (FlxG.save.data.noteSplash ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
-					case 6:
+						changeSelection();
+					case 7:
 						FlxG.save.data.hitsounds = !FlxG.save.data.hitsounds;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Hitsounds " + (FlxG.save.data.hitsounds ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
-					case 7:
+						changeSelection();
+					case 8:
 						FlxG.save.data.flashing = !FlxG.save.data.flashing;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Flasing Lights " + (FlxG.save.data.flashing ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
-					case 8:
+						changeSelection();
+					case 9:
 						trace('switch');
 						FlxG.switchState(new LoadReplayState());
 				}

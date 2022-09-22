@@ -75,6 +75,9 @@ class TitleState extends MusicBeatState
 		if (FlxG.save.data.accuracyDisplay == null)
 			FlxG.save.data.accuracyDisplay = true;
 
+		if (FlxG.save.data.ghostTapping == null)
+			FlxG.save.data.ghostTapping = false;
+
 		if (FlxG.save.data.hitsounds == null)
 			FlxG.save.data.hitsounds = false;
 

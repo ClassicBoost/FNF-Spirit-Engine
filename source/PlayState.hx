@@ -62,9 +62,9 @@ class PlayState extends MusicBeatState
 
 	private var vocals:FlxSound;
 
-	private var dad:Character;
+	public static var dad:Character;
 	private var gf:Character;
-	private var boyfriend:Boyfriend;
+	public static var boyfriend:Boyfriend;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -134,6 +134,13 @@ class PlayState extends MusicBeatState
 	private var fcRating:String = '';
 	private var kadeEngineWatermark:FlxText;
 	private var engineBar:FlxText;
+	private var bfcolor1:Int = 102;
+	private var bfcolor2:Int = 255;
+	private var bfcolor3:Int = 51;
+
+	private var dadcolor1:Int = 255;
+	private var dadcolor2:Int = 0;
+	private var dadcolor3:Int = 0;
 	
 	public static var campaignScore:Int = 0;
 
@@ -142,6 +149,7 @@ class PlayState extends MusicBeatState
 	public static var daPixelZoom:Float = 6;
 
 	public static var theFunne:Bool = true;
+	private var noGhostTapping:Bool = false;
 	var funneEffect:FlxSprite;
 	var inCutscene:Bool = false;
 	public static var repPresses:Int = 0;
@@ -154,6 +162,7 @@ class PlayState extends MusicBeatState
 	{
 
 		theFunne = FlxG.save.data.newInput;
+		noGhostTapping = false;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -673,6 +682,64 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
+		// I know there is an easier way but I'm too lazy
+		if (dad.curCharacter == 'bf' || dad.curCharacter == 'bf-car') {
+			dadcolor1 = 49;
+			dadcolor2 = 176;
+			dadcolor3 = 209;
+		}
+		else if (dad.curCharacter == 'gf') {
+			dadcolor1 = 165;
+			dadcolor2 = 0;
+			dadcolor3 = 77;
+		}
+		else if (dad.curCharacter == 'dad') {
+			dadcolor1 = 171;
+			dadcolor2 = 100;
+			dadcolor3 = 202;
+		}
+		else if (dad.curCharacter == 'spooky') {
+			dadcolor1 = 3;
+			dadcolor2 = 91;
+			dadcolor3 = 19;
+		}
+		else if (dad.curCharacter == 'pico') {
+			dadcolor1 = 179;
+			dadcolor2 = 211;
+			dadcolor3 = 83;
+		}
+		else if (dad.curCharacter == 'mom-car' || dad.curCharacter == 'mom') {
+			dadcolor1 = 216;
+			dadcolor2 = 85;
+			dadcolor3 = 142;
+		}
+		else if (dad.curCharacter == 'parents' || dad.curCharacter == 'parents-christmas') {
+			dadcolor1 = 216;
+			dadcolor2 = 85;
+			dadcolor3 = 142;
+		}
+		else if (dad.curCharacter == 'senpai' || dad.curCharacter == 'senpai-angry') {
+			dadcolor1 = 255;
+			dadcolor2 = 170;
+			dadcolor3 = 111;
+		}
+		else {
+			dadcolor1 = 255;
+			dadcolor2 = 0;
+			dadcolor3 = 0;
+		}
+		
+		if (boyfriend.curCharacter == 'bf' || boyfriend.curCharacter == 'bf-car' || boyfriend.curCharacter == 'bf-christmas' || boyfriend.curCharacter == 'bf-pixel') {
+			bfcolor1 = 49;
+			bfcolor2 = 176;
+			bfcolor3 = 209;
+		}
+		else {
+			bfcolor1 = 102;
+			bfcolor2 = 255;
+			bfcolor3 = 51;
+		}
+
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		if (FlxG.save.data.downscroll)
 			healthBarBG.y = 50;
@@ -683,7 +750,7 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.createFilledBar(FlxColor.fromRGB(dadcolor1,dadcolor2,dadcolor3), FlxColor.fromRGB(bfcolor1,bfcolor2,bfcolor3));
 		// healthBar
 		add(healthBar);
 
@@ -1384,6 +1451,9 @@ class PlayState extends MusicBeatState
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
+		if (!FlxG.save.data.ghostTapping && songScore != 0)
+		noGhostTapping = true;
+
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
@@ -1652,7 +1722,7 @@ class PlayState extends MusicBeatState
 						{
 							health -= 0.075;
 							vocals.volume = 0;
-							if (theFunne)
+							if (theFunne || noGhostTapping)
 								noteMiss(daNote.noteData);
 						}
 	
@@ -1974,8 +2044,11 @@ class PlayState extends MusicBeatState
 
 			add(sploosh);
 			sploosh.cameras = [camHUD];
+			if (allSicks)
+			sploosh.animation.play('splash ' + FlxG.random.int(0, 1) + " 4");
+			else
 			sploosh.animation.play('splash ' + FlxG.random.int(0, 1) + " " + note.noteData);
-			sploosh.alpha = 0.6;
+			sploosh.alpha = 0.7;
 			sploosh.offset.x += 90;
 			sploosh.offset.y += 80;
 			sploosh.animation.finishCallback = function(name) sploosh.kill();
@@ -2115,7 +2188,7 @@ class PlayState extends MusicBeatState
 										if (controlArray[ignoreList[shit]])
 											inIgnoreList = true;
 									}
-									if (!inIgnoreList && !theFunne)
+									if ((!inIgnoreList && !theFunne) || noGhostTapping)
 										badNoteCheck();
 								}
 							}
@@ -2198,7 +2271,7 @@ class PlayState extends MusicBeatState
 						daNote.destroy();
 					}
 				}
-				else if (!theFunne)
+				else if (!theFunne || noGhostTapping)
 				{
 					badNoteCheck();
 				}
@@ -2542,10 +2615,10 @@ class PlayState extends MusicBeatState
 	private function tweenIcons():Void
 		{
 			iconP1.scale.set(1.3, 1.3);
-			FlxTween.tween(iconP1, {"scale.x": 1, "scale.y": 1}, Conductor.stepCrochet / 500, {ease: FlxEase.cubeOut});
+			FlxTween.tween(iconP1, {"scale.x": 1, "scale.y": 1}, Conductor.stepCrochet / 300, {ease: FlxEase.cubeOut});
 	
 			iconP2.scale.set(1.3, 1.3);
-			FlxTween.tween(iconP2, {"scale.x": 1, "scale.y": 1}, Conductor.stepCrochet / 500, {ease: FlxEase.cubeOut});
+			FlxTween.tween(iconP2, {"scale.x": 1, "scale.y": 1}, Conductor.stepCrochet / 300, {ease: FlxEase.cubeOut});
 		}
 
 	override function beatHit()
