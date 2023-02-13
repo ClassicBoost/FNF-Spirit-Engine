@@ -650,7 +650,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
-		// I know there is an easier way but I'm too lazy
+		// please don't yell at me traso, I know this is a mess :<
 		if (dad.curCharacter == 'bf' || dad.curCharacter == 'bf-car') {
 			dadcolor1 = 49;
 			dadcolor2 = 176;
@@ -2670,6 +2670,7 @@ class PlayState extends MusicBeatState
 	function lightningStrikeShit():Void
 	{
 		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+		if (FlxG.save.data.flashing)
 		halloweenBG.animation.play('lightning');
 
 		lightningStrikeBeat = curBeat;
