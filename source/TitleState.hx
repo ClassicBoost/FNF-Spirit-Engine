@@ -86,6 +86,9 @@ class TitleState extends MusicBeatState
 
 		if (FlxG.save.data.noteSplash == null)
 			FlxG.save.data.noteSplash = true;
+
+		if (FlxG.save.data.camMovements == null)
+			FlxG.save.data.camMovements = true;
 			
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 

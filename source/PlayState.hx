@@ -80,7 +80,7 @@ class PlayState extends MusicBeatState
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
 	public var dadStrums:FlxTypedGroup<FlxSprite>;
 
-	private var camZooming:Bool = false;
+	private var camZooming:Bool = true;
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
@@ -134,7 +134,8 @@ class PlayState extends MusicBeatState
 	var replayTxt:FlxText;
 
 	// modded specific
-	private var fcRating:String = '';
+	var fcRating:String = '';
+	var rank:String = 'F';
 	private var kadeEngineWatermark:FlxText;
 	private var engineBar:FlxText;
 	private var bfcolor1:Int = 102;
@@ -144,6 +145,12 @@ class PlayState extends MusicBeatState
 	private var dadcolor1:Int = 255;
 	private var dadcolor2:Int = 0;
 	private var dadcolor3:Int = 0;
+
+	//Camera Shit
+	private var bfCamMovementX:Int = 0;
+	private var bfCamMovementY:Int = 0;
+	private var dadCamMovementX:Int = 0;
+	private var dadCamMovementY:Int = 0;
 	
 	public static var campaignScore:Int = 0;
 
@@ -416,7 +423,7 @@ class PlayState extends MusicBeatState
 			evilTree.scrollFactor.set(0.2, 0.2);
 			add(evilTree);
 
-			var evilSnow:FlxSprite = new FlxSprite(-200, 700).loadGraphic(Paths.image("backgrounds/$curStage/evilSnow"));
+			var evilSnow:FlxSprite = new FlxSprite(-200, 700).loadGraphic(Paths.image('backgrounds/$curStage/evilSnow'));
 			evilSnow.antialiasing = true;
 			add(evilSnow);
 		case 'school':
@@ -651,61 +658,61 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = -5000;
 
 		// please don't yell at me traso, I know this is a mess :<
-		if (dad.curCharacter == 'bf' || dad.curCharacter == 'bf-car') {
-			dadcolor1 = 49;
-			dadcolor2 = 176;
-			dadcolor3 = 209;
+		switch (dad.curCharacter) {
+			case 'bf','bf-car','bf-christmas','bf-pixel':
+				dadcolor1 = 49;
+				dadcolor2 = 176;
+				dadcolor3 = 209;
+			case 'gf':
+				dadcolor1 = 165;
+				dadcolor2 = 0;
+				dadcolor3 = 77;
+			case 'dad':
+				dadcolor1 = 171;
+				dadcolor2 = 100;
+				dadcolor3 = 202;
+			case 'spooky':
+				dadcolor1 = 3;
+				dadcolor2 = 91;
+				dadcolor3 = 19;
+			case 'monster','monster-christmas':
+				dadcolor1 = 243;
+				dadcolor2 = 243;
+				dadcolor3 = 110;
+			case 'pico':
+				dadcolor1 = 179;
+				dadcolor2 = 211;
+				dadcolor3 = 83;
+			case 'mom-car','mom':
+				dadcolor1 = 216;
+				dadcolor2 = 85;
+				dadcolor3 = 142;
+			case 'parents','parents-christmas':
+				dadcolor1 = 216;
+				dadcolor2 = 85;
+				dadcolor3 = 142;
+			case 'senpai','senpai-angry':
+				dadcolor1 = 255;
+				dadcolor2 = 170;
+				dadcolor3 = 111;
+			default:
+				dadcolor1 = 255;
+				dadcolor2 = 0;
+				dadcolor3 = 0;
 		}
-		else if (dad.curCharacter == 'gf') {
-			dadcolor1 = 165;
-			dadcolor2 = 0;
-			dadcolor3 = 77;
-		}
-		else if (dad.curCharacter == 'dad') {
-			dadcolor1 = 171;
-			dadcolor2 = 100;
-			dadcolor3 = 202;
-		}
-		else if (dad.curCharacter == 'spooky') {
-			dadcolor1 = 3;
-			dadcolor2 = 91;
-			dadcolor3 = 19;
-		}
-		else if (dad.curCharacter == 'pico') {
-			dadcolor1 = 179;
-			dadcolor2 = 211;
-			dadcolor3 = 83;
-		}
-		else if (dad.curCharacter == 'mom-car' || dad.curCharacter == 'mom') {
-			dadcolor1 = 216;
-			dadcolor2 = 85;
-			dadcolor3 = 142;
-		}
-		else if (dad.curCharacter == 'parents' || dad.curCharacter == 'parents-christmas') {
-			dadcolor1 = 216;
-			dadcolor2 = 85;
-			dadcolor3 = 142;
-		}
-		else if (dad.curCharacter == 'senpai' || dad.curCharacter == 'senpai-angry') {
-			dadcolor1 = 255;
-			dadcolor2 = 170;
-			dadcolor3 = 111;
-		}
-		else {
-			dadcolor1 = 255;
-			dadcolor2 = 0;
-			dadcolor3 = 0;
-		}
-		
-		if (boyfriend.curCharacter == 'bf' || boyfriend.curCharacter == 'bf-car' || boyfriend.curCharacter == 'bf-christmas' || boyfriend.curCharacter == 'bf-pixel') {
-			bfcolor1 = 49;
-			bfcolor2 = 176;
-			bfcolor3 = 209;
-		}
-		else {
-			bfcolor1 = 102;
-			bfcolor2 = 255;
-			bfcolor3 = 51;
+		switch (boyfriend.curCharacter) {
+			case 'bf','bf-car','bf-christmas','bf-pixel':
+				bfcolor1 = 49;
+				bfcolor2 = 176;
+				bfcolor3 = 209;
+			case 'pico':
+				bfcolor1 = 179;
+				bfcolor2 = 211;
+				bfcolor3 = 83;
+			default:
+				bfcolor1 = 102;
+				bfcolor2 = 255;
+				bfcolor3 = 51;
 		}
 
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
@@ -1402,14 +1409,22 @@ class PlayState extends MusicBeatState
 
 		scoreTxt.text = 'Score: ${songScore}';
 		if (FlxG.save.data.accuracyDisplay)
-		scoreTxt.text += ' | Misses: ${misses} | Accuracy: ${truncateFloat(accuracy, 2)}%${fcRating}';
+		scoreTxt.text += ' | Misses: ${misses} | Accuracy: ${truncateFloat(accuracy, 2)}% [${fcRating}$rank]';
 
-		if (sicks > 0 && misses == 0) fcRating = ' - MFC';
-		if (goods > 0 && misses == 0) fcRating = ' - GFC';
-		if (bads > 0 && misses == 0) fcRating = ' - FC';
-		if (shits > 0 && misses == 0) fcRating = ' - FC-';
-		if (misses > 0 && misses < 10) fcRating = ' - SDCB';
-		else if (misses >= 10) fcRating = ' - CB';
+		if (accuracy == 100) rank = 'S';
+		else if (accuracy >= 90) rank = 'A';
+		else if (accuracy >= 80) rank = 'B';
+		else if (accuracy >= 70) rank = 'C';
+		else if (accuracy >= 60) rank = 'D';
+		else if (accuracy >= 50) rank = 'E';
+		else if (accuracy < 50) rank = 'F';
+
+		if (sicks > 0 && misses == 0) fcRating = 'MFC - ';
+		if (goods > 0 && misses == 0) fcRating = 'GFC - ';
+		if (bads > 0 && misses == 0) fcRating = 'FC - ';
+		if (shits > 0 && misses == 0) fcRating = 'FC- - ';
+		if (misses > 0 && misses < 10) fcRating = 'SDCB - ';
+		else if (misses >= 10) fcRating = 'CB - ';
 		
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1515,21 +1530,21 @@ class PlayState extends MusicBeatState
 				// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
 			}
 
-			if (camFollow.x != dad.getMidpoint().x + 150 && !PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection)
+			if (camFollow.x != dad.getMidpoint().x + 150 + dadCamMovementX && !PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection)
 			{
-				camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+				camFollow.setPosition(dad.getMidpoint().x + 150 + dadCamMovementX, dad.getMidpoint().y - 100 + dadCamMovementY);
 				// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 
 				switch (dad.curCharacter)
 				{
 					case 'mom':
-						camFollow.y = dad.getMidpoint().y;
+						camFollow.y = dad.getMidpoint().y + dadCamMovementY;
 					case 'senpai':
-						camFollow.y = dad.getMidpoint().y - 430;
-						camFollow.x = dad.getMidpoint().x - 100;
+						camFollow.y = dad.getMidpoint().y - 430 + dadCamMovementY;
+						camFollow.x = dad.getMidpoint().x - 100 + dadCamMovementX;
 					case 'senpai-angry':
-						camFollow.y = dad.getMidpoint().y - 430;
-						camFollow.x = dad.getMidpoint().x - 100;
+						camFollow.y = dad.getMidpoint().y - 430 + dadCamMovementY;
+						camFollow.x = dad.getMidpoint().x - 100 + dadCamMovementX;
 				}
 
 				if (dad.curCharacter == 'mom')
@@ -1541,22 +1556,22 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection && camFollow.x != boyfriend.getMidpoint().x - 100)
+			if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection && camFollow.x != boyfriend.getMidpoint().x - 100 + bfCamMovementX)
 			{
-				camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+				camFollow.setPosition(boyfriend.getMidpoint().x - 100 - bfCamMovementX, boyfriend.getMidpoint().y - 100 + bfCamMovementY);
 
 				switch (curStage)
 				{
 					case 'limo':
-						camFollow.x = boyfriend.getMidpoint().x - 300;
+						camFollow.x = boyfriend.getMidpoint().x - 300 + bfCamMovementY;
 					case 'mall':
-						camFollow.y = boyfriend.getMidpoint().y - 200;
+						camFollow.y = boyfriend.getMidpoint().y - 200 + bfCamMovementY;
 					case 'school':
-						camFollow.x = boyfriend.getMidpoint().x - 200;
-						camFollow.y = boyfriend.getMidpoint().y - 200;
+						camFollow.x = boyfriend.getMidpoint().x - 200 - bfCamMovementX;
+						camFollow.y = boyfriend.getMidpoint().y - 200 + bfCamMovementY;
 					case 'schoolEvil':
-						camFollow.x = boyfriend.getMidpoint().x - 200;
-						camFollow.y = boyfriend.getMidpoint().y - 200;
+						camFollow.x = boyfriend.getMidpoint().x - 200 - bfCamMovementX;
+						camFollow.y = boyfriend.getMidpoint().y - 200 + bfCamMovementY;
 				}
 
 				if (SONG.song.toLowerCase() == 'tutorial')
@@ -1671,12 +1686,28 @@ class PlayState extends MusicBeatState
 						{
 							case 2:
 								dad.playAnim('singUP' + altAnim, true);
+								if (FlxG.save.data.camMovements) {
+								dadCamMovementX = 0;
+								dadCamMovementY = -10;
+								}
 							case 3:
 								dad.playAnim('singRIGHT' + altAnim, true);
+								if (FlxG.save.data.camMovements) {
+								dadCamMovementX = 10;
+								dadCamMovementY = 0;
+								}
 							case 1:
 								dad.playAnim('singDOWN' + altAnim, true);
+								if (FlxG.save.data.camMovements) {
+								dadCamMovementX = 0;
+								dadCamMovementY = 10;
+								}
 							case 0:
 								dad.playAnim('singLEFT' + altAnim, true);
+								if (FlxG.save.data.camMovements) {
+								dadCamMovementX = -10;
+								dadCamMovementY = 0;
+								}
 						}
 
 						dadStrums.forEach(function(spr:FlxSprite)
@@ -2563,12 +2594,28 @@ class PlayState extends MusicBeatState
 					{
 						case 2:
 							boyfriend.playAnim('singUP', true);
+							if (FlxG.save.data.camMovements) {
+							bfCamMovementX = 0;
+							bfCamMovementY = -10;
+							}
 						case 3:
 							boyfriend.playAnim('singRIGHT', true);
+							if (FlxG.save.data.camMovements) {
+							bfCamMovementX = -10;
+							bfCamMovementY = 0;
+							}
 						case 1:
 							boyfriend.playAnim('singDOWN', true);
+							if (FlxG.save.data.camMovements) {
+							bfCamMovementX = 0;
+							bfCamMovementY = 10;
+							}
 						case 0:
 							boyfriend.playAnim('singLEFT', true);
+							if (FlxG.save.data.camMovements) {
+							bfCamMovementX = 10;
+							bfCamMovementY = 0;
+							}
 					}
 		
 					playerStrums.forEach(function(spr:FlxSprite)

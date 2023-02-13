@@ -3,6 +3,7 @@ package;
 import Controls.KeyboardScheme;
 import Controls.Control;
 import flash.text.TextField;
+import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
@@ -22,13 +23,27 @@ class OptionsMenu extends MusicBeatState
 
 	private var grpControls:FlxTypedGroup<Alphabet>;
 	var versionShit:FlxText;
+	var camFollow:FlxObject;
 	override function create()
 	{
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolStringFile("Offset" + "\n" + (FlxG.save.data.dfjk ? 'DFJK' : 'WASD') + "\n" + (FlxG.save.data.newInput ? "Kade input" : "Vanilla Input") + "\n" + (FlxG.save.data.ghostTapping ? "Ghost Tapping" : "No Ghost Tapping") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off") + "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off") + "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off") + "\nBotplay " + (FlxG.save.data.botplay ? "on" : "off") + "\nPractice Mode " + (FlxG.save.data.practiceMode ? "on" : "off") + "\nLoad replays");
+		controlsStrings = CoolUtil.coolStringFile("Offset" + "\n" + (FlxG.save.data.dfjk ? 'DFJK' : 'WASD')
+		+ "\n" + (FlxG.save.data.newInput ? "Kade input" : "Vanilla Input") + "\n"
+		+ (FlxG.save.data.ghostTapping ? "Ghost Tapping" : "No Ghost Tapping") + "\n"
+		+ (FlxG.save.data.downscroll ? 'Down' : 'Up') + 'scroll'
+		+ "\nAccuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off")
+		+ "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + '\n'
+		+ (FlxG.save.data.camMovements ? "Camera Moves" : "Still Camera")
+		+ "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off")
+		+ "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off")
+		+ "\nBotplay " + (FlxG.save.data.botplay ? "on" : "off")
+		+ "\nPractice Mode " + (FlxG.save.data.practiceMode ? "on" : "off")
+		+ "\nLoad replays");
 		
 		trace(controlsStrings);
 
+		menuBG.scrollFactor.x = 0;
+		menuBG.scrollFactor.y = 0.18;
 		menuBG.color = 0xFF666BFF;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -36,7 +51,10 @@ class OptionsMenu extends MusicBeatState
 		menuBG.antialiasing = true;
 		add(menuBG);
 
-		FlxG.sound.playMusic(Paths.music('TheAmbience'));
+		camFollow = new FlxObject(0, 0, 1, 1);
+		add(camFollow);
+
+	//	FlxG.sound.playMusic(Paths.music('TheAmbience'));
 
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
@@ -65,7 +83,7 @@ class OptionsMenu extends MusicBeatState
 		super.update(elapsed);
 
 			if (controls.BACK) {
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			//	FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				FlxG.switchState(new MainMenuState());
 			}
 			if (controls.UP_P) {
@@ -111,20 +129,22 @@ class OptionsMenu extends MusicBeatState
 			if (curSelected == 6)
 				versionShit.text = 'With this on, note splashes will appear if you hit a sick.';
 			if (curSelected == 7)
-				versionShit.text = 'With this on, everytime you hit a note a \"Tick\" sound will play.';
+				versionShit.text = 'Should the camera move with the note?';
 			if (curSelected == 8)
-				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
+				versionShit.text = 'With this on, everytime you hit a note a \"Tick\" sound will play.';
 			if (curSelected == 9)
-				versionShit.text = 'Turn this on if you want the bot to play for you.';
+				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
 			if (curSelected == 10)
-				versionShit.text = 'Turn this on if you don\'t wanna die.';
+				versionShit.text = 'Turn this on if you want the bot to play for you.';
 			if (curSelected == 11)
+				versionShit.text = 'Turn this on if you don\'t wanna die.';
+			if (curSelected == 12)
 				versionShit.text = 'Replay through the songs you\'ve played.';
 	
 
 			if (controls.ACCEPT)
 			{
-				if (curSelected != 11)
+				if (curSelected != 12)
 					grpControls.remove(grpControls.members[curSelected]);
 				switch(curSelected)
 				{
@@ -180,34 +200,41 @@ class OptionsMenu extends MusicBeatState
 						grpControls.add(ctrl);
 						changeSelection();
 					case 7:
+						FlxG.save.data.camMovements = !FlxG.save.data.camMovements;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.camMovements ? "Camera Moves" : "Still Camera"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 3;
+						grpControls.add(ctrl);
+						changeSelection();
+					case 8:
 						FlxG.save.data.hitsounds = !FlxG.save.data.hitsounds;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Hitsounds " + (FlxG.save.data.hitsounds ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 8:
+					case 9:
 						FlxG.save.data.flashing = !FlxG.save.data.flashing;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Flasing Lights " + (FlxG.save.data.flashing ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 9:
+					case 10:
 						FlxG.save.data.botplay = !FlxG.save.data.botplay;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Botplay " + (FlxG.save.data.botplay ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 10:
+					case 11:
 						FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Practice Mode " + (FlxG.save.data.practiceMode ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 11:
+					case 12:
 						trace('switch');
 						FlxG.switchState(new LoadReplayState());
 				}
@@ -232,6 +259,8 @@ class OptionsMenu extends MusicBeatState
 			curSelected = 0;
 
 		// selector.y = (70 * curSelected) + 30;
+
+		camFollow.setPosition(0, (curSelected * 50));
 
 		var bullShit:Int = 0;
 
