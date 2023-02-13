@@ -17,7 +17,7 @@ import haxe.io.Path;
 
 class LoadingState extends MusicBeatState
 {
-	inline static var MIN_TIME = 1.0;
+	inline static var MIN_TIME = 0.35;
 	
 	var target:FlxState;
 	var stopMusic = false;

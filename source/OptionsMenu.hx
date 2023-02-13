@@ -25,16 +25,18 @@ class OptionsMenu extends MusicBeatState
 	override function create()
 	{
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolStringFile("Offset" + "\n" + (FlxG.save.data.dfjk ? 'DFJK' : 'WASD') + "\n" + (FlxG.save.data.newInput ? "Kade input" : "Vanilla Input") + "\n" + (FlxG.save.data.ghostTapping ? "Ghost Tapping" : "No Ghost Tapping") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off") + "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off") + "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off") + "\nLoad replays");
+		controlsStrings = CoolUtil.coolStringFile("Offset" + "\n" + (FlxG.save.data.dfjk ? 'DFJK' : 'WASD') + "\n" + (FlxG.save.data.newInput ? "Kade input" : "Vanilla Input") + "\n" + (FlxG.save.data.ghostTapping ? "Ghost Tapping" : "No Ghost Tapping") + "\n" + (FlxG.save.data.downscroll ? 'Downscroll' : 'Upscroll') + "\nAccuracy " + (FlxG.save.data.accuracyDisplay ? "on" : "off") + "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off") + "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off") + "\nBotplay " + (FlxG.save.data.botplay ? "on" : "off") + "\nPractice Mode " + (FlxG.save.data.practiceMode ? "on" : "off") + "\nLoad replays");
 		
 		trace(controlsStrings);
 
-		menuBG.color = 0xFFea71fd;
+		menuBG.color = 0xFF666BFF;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 		add(menuBG);
+
+		FlxG.sound.playMusic(Paths.music('TheAmbience'));
 
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
@@ -62,8 +64,10 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-			if (controls.BACK)
+			if (controls.BACK) {
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				FlxG.switchState(new MainMenuState());
+			}
 			if (controls.UP_P) {
 				if (!FlxG.save.data.newInput && curSelected == 4)
 				changeSelection(-1);
@@ -92,7 +96,7 @@ class OptionsMenu extends MusicBeatState
 				if (FlxG.save.data.newInput)
 				versionShit.text = 'Kade Engine input fixes the broken input system.'
 				else
-				versionShit.text = 'Vanilla input is the og broken input, however it forces ghost tapping off.';
+				versionShit.text = 'Vanilla input is the og broken input and it forces ghost tapping off.';
 			}
 			if (curSelected == 3) {
 				if (FlxG.save.data.ghostTapping)
@@ -103,20 +107,24 @@ class OptionsMenu extends MusicBeatState
 			if (curSelected == 4)
 				versionShit.text = 'Choose where you want the notes to come from.';
 			if (curSelected == 5)
-				versionShit.text = 'With this on to display your accuracy and misses.';
+				versionShit.text = 'With this on, your accuracy and misses will display.';
 			if (curSelected == 6)
-				versionShit.text = 'With this on note splashes will appear if you hit a sick.';
+				versionShit.text = 'With this on, note splashes will appear if you hit a sick.';
 			if (curSelected == 7)
-				versionShit.text = 'With this on everytime you hit a note a \"Tick\" sound will play.';
+				versionShit.text = 'With this on, everytime you hit a note a \"Tick\" sound will play.';
 			if (curSelected == 8)
 				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
 			if (curSelected == 9)
+				versionShit.text = 'Turn this on if you want the bot to play for you.';
+			if (curSelected == 10)
+				versionShit.text = 'Turn this on if you don\'t wanna die.';
+			if (curSelected == 11)
 				versionShit.text = 'Replay through the songs you\'ve played.';
 	
 
 			if (controls.ACCEPT)
 			{
-				if (curSelected != 9)
+				if (curSelected != 11)
 					grpControls.remove(grpControls.members[curSelected]);
 				switch(curSelected)
 				{
@@ -186,6 +194,20 @@ class OptionsMenu extends MusicBeatState
 						grpControls.add(ctrl);
 						changeSelection();
 					case 9:
+						FlxG.save.data.botplay = !FlxG.save.data.botplay;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Botplay " + (FlxG.save.data.botplay ? "on" : "off"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 3;
+						grpControls.add(ctrl);
+						changeSelection();
+					case 10:
+						FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Practice Mode " + (FlxG.save.data.practiceMode ? "on" : "off"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 3;
+						grpControls.add(ctrl);
+						changeSelection();
+					case 11:
 						trace('switch');
 						FlxG.switchState(new LoadReplayState());
 				}
