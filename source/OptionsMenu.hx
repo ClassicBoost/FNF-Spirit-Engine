@@ -35,6 +35,7 @@ class OptionsMenu extends MusicBeatState
 		+ "\nNotesplashes " + (FlxG.save.data.noteSplash ? "on" : "off") + '\n'
 		+ (FlxG.save.data.camMovements ? "Camera Moves" : "Still Camera")
 		+ "\nHitsounds " + (FlxG.save.data.hitsounds ? "on" : "off")
+		+ '\nSafeframes'
 		+ "\nFlasing Lights " + (FlxG.save.data.flashing ? "on" : "off")
 		+ "\nBotplay " + (FlxG.save.data.botplay ? "on" : "off")
 		+ "\nPractice Mode " + (FlxG.save.data.practiceMode ? "on" : "off")
@@ -97,7 +98,8 @@ class OptionsMenu extends MusicBeatState
 				changeSelection(1);
 			}
 			
-			if (curSelected == 0) {
+			switch (curSelected) {
+				case 0:
 				versionShit.text = "Change your offsets\n" + FlxG.save.data.offset;
 			if (controls.RIGHT_R)
 			{
@@ -107,52 +109,67 @@ class OptionsMenu extends MusicBeatState
 			{
 				FlxG.save.data.offset--;
 			}
-			}
-			if (curSelected == 1)
+			case 1:
 				versionShit.text = 'Change your controls. (WIP)';
-			if (curSelected == 2) {
+			case 2:
 				if (FlxG.save.data.newInput)
 				versionShit.text = 'Kade Engine input fixes the broken input system.'
 				else
 				versionShit.text = 'Vanilla input is the og broken input and it forces ghost tapping off.';
-			}
-			if (curSelected == 3) {
+			case 3:
 				if (FlxG.save.data.ghostTapping)
 				versionShit.text = 'You will only miss if you don\'t hit the note.\nThis can remove a lot of the challenge since you can mash';
 				else
 				versionShit.text = 'After your turn starts; Ghost tapping will disable itself\nYou will miss if you press a invaild note.';
-			}
-			if (curSelected == 4)
+			case 4:
 				versionShit.text = 'Choose where you want the notes to come from.';
-			if (curSelected == 5)
+			case 5:
 				versionShit.text = 'With this on, your accuracy and misses will display.';
-			if (curSelected == 6)
+			case 6:
 				versionShit.text = 'With this on, note splashes will appear if you hit a sick.';
-			if (curSelected == 7)
+			case 7:
 				versionShit.text = 'Should the camera move with the note?';
-			if (curSelected == 8)
+			case 8:
 				versionShit.text = 'With this on, everytime you hit a note a \"Tick\" sound will play.';
-			if (curSelected == 9)
+			case 9:
+				versionShit.text = 'Change how easy/hard it is to hit the notes\n' + FlxG.save.data.stupudsafefarme + '\n[Game restart may be required.]\n';
+			if (controls.RIGHT_R) // This is completely pointless because it won't load eitherway
+			{
+				if (FlxG.save.data.stupudsafefarme == null)
+				FlxG.save.data.stupudsafefarme = 10;
+				else
+				FlxG.save.data.stupudsafefarme++;
+			}
+			if (controls.LEFT_R)
+			{
+				if (FlxG.save.data.stupudsafefarme == null)
+				FlxG.save.data.stupudsafefarme = 10;
+				else
+				FlxG.save.data.stupudsafefarme--;
+			}
+			case 10:
 				versionShit.text = 'Turn this off if you\'re sensitive to flashing lights!';
-			if (curSelected == 10)
+			case 11:
 				versionShit.text = 'Turn this on if you want the bot to play for you.';
-			if (curSelected == 11)
+			case 12:
 				versionShit.text = 'Turn this on if you don\'t wanna die.';
-			if (curSelected == 12)
+			case 13:
 				versionShit.text = 'Replay through the songs you\'ve played.';
-	
+			}
+
+			Conductor.safeZoneOffset = (FlxG.save.data.stupudsafefarme / 60) * 1000;
 
 			if (controls.ACCEPT)
 			{
-				if (curSelected != 12)
+				if (curSelected != 13 && curSelected != 0 && curSelected != 9)
 					grpControls.remove(grpControls.members[curSelected]);
 				switch(curSelected)
 				{
 					case 0:
-						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Offset", true, false);
-						ctrl.isMenuItem = true;
-						ctrl.targetY = curSelected;
-						grpControls.add(ctrl);
+					//	var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Offset", true, false);
+					//	ctrl.isMenuItem = true;
+					//	ctrl.targetY = curSelected;
+					//	grpControls.add(ctrl);
 					case 1:
 						FlxG.save.data.dfjk = !FlxG.save.data.dfjk;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, (FlxG.save.data.dfjk ? 'DFJK' : 'WASD'), true, false);
@@ -214,27 +231,32 @@ class OptionsMenu extends MusicBeatState
 						grpControls.add(ctrl);
 						changeSelection();
 					case 9:
+					//	var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Safeframes", true, false);
+					//	ctrl.isMenuItem = true;
+					//	ctrl.targetY = curSelected;
+					//	grpControls.add(ctrl);
+					case 10:
 						FlxG.save.data.flashing = !FlxG.save.data.flashing;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Flasing Lights " + (FlxG.save.data.flashing ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 10:
+					case 11:
 						FlxG.save.data.botplay = !FlxG.save.data.botplay;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Botplay " + (FlxG.save.data.botplay ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 11:
+					case 12:
 						FlxG.save.data.practiceMode = !FlxG.save.data.practiceMode;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Practice Mode " + (FlxG.save.data.practiceMode ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 						changeSelection();
-					case 12:
+					case 13:
 						trace('switch');
 						FlxG.switchState(new LoadReplayState());
 				}

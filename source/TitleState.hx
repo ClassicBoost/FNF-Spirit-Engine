@@ -36,6 +36,8 @@ class TitleState extends MusicBeatState
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
 
+	public static var lolsafe:Int = 10;
+
 	var curWacky:Array<String> = [];
 
 	var wackyImage:FlxSprite;
@@ -89,6 +91,9 @@ class TitleState extends MusicBeatState
 
 		if (FlxG.save.data.camMovements == null)
 			FlxG.save.data.camMovements = true;
+
+		if (FlxG.save.data.stupudsafefarme == null)
+			FlxG.save.data.stupudsafefarme = 10;
 			
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
@@ -156,6 +161,8 @@ class TitleState extends MusicBeatState
 
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
+
+		Conductor.safeZoneOffset = (FlxG.save.data.stupudsafefarme / 60) * 1000;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		// bg.antialiasing = true;
@@ -254,6 +261,8 @@ class TitleState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
+
+		lolsafe = FlxG.save.data.stupudsafefarme;
 
 		if (FlxG.keys.justPressed.F)
 		{

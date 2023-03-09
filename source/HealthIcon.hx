@@ -52,8 +52,14 @@ class HealthIcon extends FlxSprite
 		}
 
 		antialiasing = true;
+	/*	animation.add('idle', [2], 0, false, isPlayer);
+		animation.add('hurt', [3], 0, false, isPlayer);
+		animation.add('losing', [4], 0, false, isPlayer);
+		animation.add('winning', [1], 0, false, isPlayer);
+		animation.add('victorious', [0], 0, false, isPlayer);*/
+
 		animation.add('idle', [0], 0, false, isPlayer);
-		animation.add('losing', [1], 0, false, isPlayer);
+		animation.add('hurt', [1], 0, false, isPlayer);
 		animation.add('winning', [2], 0, false, isPlayer);
 			
 		animation.play('idle');

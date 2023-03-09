@@ -7,6 +7,7 @@ import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import flixel.FlxG;
 
 class Main extends Sprite
 {
@@ -22,6 +23,7 @@ class Main extends Sprite
 
 	public static function main():Void
 	{
+		
 		Lib.current.addChild(new Main());
 	}
 
