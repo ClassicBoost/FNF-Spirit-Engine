@@ -13,6 +13,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
+import options.OptionsMenu;
 
 using StringTools;
 
@@ -34,7 +35,6 @@ class MainMenuState extends MusicBeatState
 
 	public static var kadeEngineVer:String = "1.2";
 	public static var gameVer:String = "0.2.7.1";
-	public static var spiritVer:String = '1.1.2 BETA';
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -48,10 +48,11 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menus/bg'));
 		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.12;
-		bg.setGraphicSize(Std.int(bg.width * 1.15));
+		bg.scrollFactor.y = 0.18;
+		bg.color = 0xFFFDE871;
+		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = true;
@@ -60,10 +61,10 @@ class MainMenuState extends MusicBeatState
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menus/bg'));
 		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.12;
-		magenta.setGraphicSize(Std.int(magenta.width * 1.15));
+		magenta.scrollFactor.y = 0.18;
+		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
@@ -75,7 +76,7 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
+		var tex = Paths.getSparrowAtlas('menus/FNF_main_menu_assets');
 
 		for (i in 0...optionShit.length)
 		{
@@ -93,7 +94,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, gameVer + " FNF // Spirit Engine v" + spiritVer + " (KE v" + kadeEngineVer + ")", 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, gameVer + " FNF - " + kadeEngineVer + " Kade Engine", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -184,8 +185,6 @@ class MainMenuState extends MusicBeatState
 
 										trace("Freeplay Menu Selected");
 
-									case 'credits': // this doesn't even work
-										FlxG.switchState(new CreditsState());
 									case 'options':
 										FlxG.switchState(new OptionsMenu());
 								}

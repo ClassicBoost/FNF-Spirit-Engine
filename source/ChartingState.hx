@@ -87,16 +87,6 @@ class ChartingState extends MusicBeatState
 	{
 		curSection = lastSection;
 
-		var bg:FlxSprite = new FlxSprite(0).loadGraphic(Paths.image('menuDesat'));
-		bg.setGraphicSize(Std.int(bg.width * 1));
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0;
-		bg.updateHitbox();
-		bg.screenCenter();
-		bg.color = 0xFF383838;
-		bg.antialiasing = true;
-		add(bg);
-
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
 		add(gridBG);
 
@@ -131,8 +121,6 @@ class ChartingState extends MusicBeatState
 				needsVoices: true,
 				player1: 'bf',
 				player2: 'dad',
-				gfVersion: 'gf',
-				curStage: 'stage',
 				speed: 1,
 				validScore: false
 			};
@@ -238,7 +226,6 @@ class ChartingState extends MusicBeatState
 		stepperBPM.name = 'song_bpm';
 
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
-		var dafuckingstage:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
@@ -252,20 +239,6 @@ class ChartingState extends MusicBeatState
 		});
 
 		player2DropDown.selectedLabel = _song.player2;
-
-		var gfVersionDropDown = new FlxUIDropDownMenu(10, 140, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
-		{
-			_song.gfVersion = characters[Std.parseInt(character)];
-		});
-	
-		gfVersionDropDown.selectedLabel = _song.gfVersion;
-
-		var curStageDropDown = new FlxUIDropDownMenu(140, 140, FlxUIDropDownMenu.makeStrIdLabelArray(dafuckingstage, true), function(character:String)
-		{
-			_song.curStage = dafuckingstage[Std.parseInt(character)];
-		});
-	
-		curStageDropDown.selectedLabel = _song.curStage;
 
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
@@ -281,8 +254,6 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(stepperSpeed);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
-		tab_group_song.add(gfVersionDropDown);
-		tab_group_song.add(curStageDropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();
@@ -695,10 +666,9 @@ class ChartingState extends MusicBeatState
 		bpmTxt.text = bpmTxt.text = Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))
 			+ " / "
 			+ Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2))
-			+ '\nSection: $curSection\n\ncurBeat: $curBeat\ncurStep: $curStep\n';
+			+ "\nSection: "
+			+ curSection;
 		super.update(elapsed);
-
-		updateHeads();
 	}
 
 	function changeNoteSustain(value:Float):Void

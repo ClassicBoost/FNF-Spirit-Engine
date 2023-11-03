@@ -1,17 +1,3 @@
-# FNF Spirit Engine
-Engine that is based off of Kade Engine 1.2 with quality of life improvements.
-
-## Features
-New Options!
-Such as Note Splashes, Hitsounds, Flashing Lights, and Ghost Tapping.
-
-![image](https://cdn.discordapp.com/attachments/930662315706163241/1022397435076677682/Friday_Night_Funkin_09_21_2022_11_40_12_PM.png)
-
-New score, health colors, and winning icons!
-
-![image](https://cdn.discordapp.com/attachments/930662315706163241/1022398149916102696/Friday_Night_Funkin_09_21_2022_11_44_27_PM_1.png)
-
-# Kade Engine
 ![KadeEngineLogo](https://user-images.githubusercontent.com/26305836/110529589-4b4eb600-80ce-11eb-9c44-e899118b0bf0.png)
 
 **Download the latest release [here](https://github.com/KadeDev/Kade-Engine/releases/latest)**

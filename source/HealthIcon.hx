@@ -24,31 +24,31 @@ class HealthIcon extends FlxSprite
 		switch(char)
 		{
 			case 'bf' | 'bf-car' | 'bf-christmas':
-				loadGraphic(Paths.image('icons/bf'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/bf'), true, 150, 150);
 			case 'gf' | 'gf-car' | 'gf-christmas' | 'gf-pixel':
-				loadGraphic(Paths.image('icons/gf'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/gf'), true, 150, 150);
 			case 'dad': 
-				loadGraphic(Paths.image('icons/dad'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/dad'), true, 150, 150);
 			case 'spooky':
-				loadGraphic(Paths.image('icons/spooky'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/spooky'), true, 150, 150);
 			case 'pico' | 'pico-player':
-				loadGraphic(Paths.image('icons/pico'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/pico'), true, 150, 150);
 			case 'mom' | 'mom-car':
-				loadGraphic(Paths.image('icons/mom'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/mom'), true, 150, 150);
 			case 'parents-christmas':
-				loadGraphic(Paths.image('icons/parents'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/parents'), true, 150, 150);
 			case 'monster' | 'monster-christmas':
-				loadGraphic(Paths.image('icons/monster'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/monster'), true, 150, 150);
 			case 'bf-pixel':
-				loadGraphic(Paths.image('icons/bf-pixel'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/bf-pixel'), true, 150, 150);
 			case 'senpai':
-				loadGraphic(Paths.image('icons/senpai'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/senpai'), true, 150, 150);
 			case 'senpai-angry':
-				loadGraphic(Paths.image('icons/senpai-angry'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/senpai-angry'), true, 150, 150);
 			case 'spirit':
-				loadGraphic(Paths.image('icons/spirit'), true, 150, 150);
+				loadGraphic(Paths.image('ui/icons/spirit'), true, 150, 150);
 			default: 
-				loadGraphic(Paths.image('icons/${char}'), true, 150, 150); // I'm pretty sure if it can't find that icon it would just appear as a haxe logo right?
+				loadGraphic(Paths.image('ui/icons/${char}'), true, 150, 150); // I'm pretty sure if it can't find that icon it would just appear as a haxe logo right?
 		}
 
 		antialiasing = true;
