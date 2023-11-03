@@ -41,10 +41,8 @@ class HealthIcon extends FlxSprite
 				loadGraphic(Paths.image('ui/icons/monster'), true, 150, 150);
 			case 'bf-pixel':
 				loadGraphic(Paths.image('ui/icons/bf-pixel'), true, 150, 150);
-			case 'senpai':
+			case 'senpai','senpai-angry':
 				loadGraphic(Paths.image('ui/icons/senpai'), true, 150, 150);
-			case 'senpai-angry':
-				loadGraphic(Paths.image('ui/icons/senpai-angry'), true, 150, 150);
 			case 'spirit':
 				loadGraphic(Paths.image('ui/icons/spirit'), true, 150, 150);
 			default: 

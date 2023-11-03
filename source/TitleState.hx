@@ -67,6 +67,15 @@ class TitleState extends MusicBeatState
 		
 		if (FlxG.save.data.accuracyDisplay == null)
 			FlxG.save.data.accuracyDisplay = true;
+
+		if (FlxG.save.data.scoreBop == null)
+			FlxG.save.data.scoreBop = true;
+
+		if (FlxG.save.data.ghostTapping == null)
+			FlxG.save.data.ghostTapping = false;
+
+		if (FlxG.save.data.framerateCap == null)
+			FlxG.save.data.framerateCap = 120;
 			
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
@@ -134,6 +143,9 @@ class TitleState extends MusicBeatState
 
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
+
+		FlxG.updateFramerate = FlxG.save.data.framerateCap;
+		FlxG.drawFramerate = FlxG.save.data.framerateCap;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		// bg.antialiasing = true;

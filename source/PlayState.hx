@@ -1313,8 +1313,8 @@ class PlayState extends MusicBeatState
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.50)));
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.width, 150, 0.09 / (FlxG.save.data.framerateCap / 60))));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(iconP2.width, 150, 0.09 / (FlxG.save.data.framerateCap / 60))));
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -1486,7 +1486,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (health <= 0)
+		if (health <= 0 && !FlxG.save.data.practiceMode)
 		{
 			boyfriend.stunned = true;
 
@@ -1826,6 +1826,13 @@ class PlayState extends MusicBeatState
 				totalNotesHit += 1;
 				sicks++;
 			}
+
+			if(FlxG.save.data.scoreBop)
+				{
+					FlxTween.cancelTweensOf(scoreTxt);
+					scoreTxt.scale.set(1.075, 1.075);
+					FlxTween.tween(scoreTxt, {"scale.x": 1, "scale.y": 1}, 0.25, {ease: FlxEase.cubeOut});
+				}
 		
 	
 			if (daRating != 'shit' || daRating != 'bad')
