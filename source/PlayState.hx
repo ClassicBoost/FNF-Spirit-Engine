@@ -1654,7 +1654,7 @@ class PlayState extends MusicBeatState
 						{
 							health -= 0.075;
 							vocals.volume = 0;
-							if (theFunne)
+							if (theFunne || !FlxG.save.data.ghostTapping)
 								noteMiss(daNote.noteData);
 						}
 	
@@ -2093,7 +2093,7 @@ class PlayState extends MusicBeatState
 										if (controlArray[ignoreList[shit]])
 											inIgnoreList = true;
 									}
-									if (!inIgnoreList && !theFunne)
+									if ((!inIgnoreList && !theFunne) || !FlxG.save.data.ghostTapping)
 										badNoteCheck();
 								}
 							}
@@ -2176,7 +2176,7 @@ class PlayState extends MusicBeatState
 						daNote.destroy();
 					}
 				}
-				else if (!FlxG.save.data.ghostTapping)
+				else if (!theFunne || !FlxG.save.data.ghostTapping)
 				{
 					badNoteCheck();
 				}
@@ -2335,7 +2335,7 @@ class PlayState extends MusicBeatState
 			{
 				if (keyP)
 					goodNoteHit(note);
-				else if (!FlxG.save.data.ghostTapping) 
+				else if (!theFunne) 
 					badNoteCheck();
 				else if (rep.replay.keyPresses.length > repPresses && !keyP)
 				{
@@ -2343,7 +2343,7 @@ class PlayState extends MusicBeatState
 					{
 						goodNoteHit(note);
 					}
-					else if (!FlxG.save.data.ghostTapping) 
+					else if (!theFunne) 
 						badNoteCheck();
 				}
 			}
@@ -2351,7 +2351,7 @@ class PlayState extends MusicBeatState
 				{
 				goodNoteHit(note);
 				}
-			else if (!FlxG.save.data.ghostTapping)
+			else if (!theFunne)
 			{
 				badNoteCheck();
 			}
